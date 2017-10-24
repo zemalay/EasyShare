@@ -1,0 +1,27 @@
+{
+  "name": "easyshare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://zemalay@github.com/zemalay/easyshare.git"
+  },
+  "author": "geovannio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zemalay/easyshare/issues"
+  },
+  "homepage": "https://github.com/zemalay/easyshare#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "connect-multiparty": "^2.0.0",
+    "consign": "^0.1.6",
+    "ejs": "^2.5.7",
+    "express": "^4.16.1",
+    "express-session": "^1.15.6"
+  }
+}
