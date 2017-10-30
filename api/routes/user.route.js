@@ -5,4 +5,7 @@ module.exports = (application) => {
     application.post("/api/saveuser", (req, res) => {
         application.api.controllers.user.saveUser(application, req, res)
     })
+    application.get('/api/getuser/:userid', (req, res) => {
+        application.api.controllers.user.getUserById(application, req, res)
+    })
 }
