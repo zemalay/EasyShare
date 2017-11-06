@@ -28,6 +28,10 @@ function user(application) {
     user.prototype.update = (id) => {
 
     }
+
+    user.prototype.getAuth = (user, callback) => {
+        userSchema.find({ 'email': user.email, 'password': user.password }, callback)
+    }
 }
 
 module.exports = function () {

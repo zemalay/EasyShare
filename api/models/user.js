@@ -7,10 +7,10 @@ var userSchema = new mongoose.Schema({
     birth_date: Date,
     date_created: { type: Date, default: Date.now },
     email: { type: String, required: true },
-    password: { type: String, required: true }
+    password: { type: String, minlength: 6, required: true }
 
 })
 
 module.exports = {
-    Schema : mongoose.model('user',userSchema)
+    Schema: mongoose.model('user', userSchema)
 }
