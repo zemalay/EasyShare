@@ -7,23 +7,22 @@ var consign = require('consign')
 /* importar o módulo do body-parser */
 var bodyParser = require('body-parser')
 
-var multiparty = require('connect-multiparty')
+var morgan = require('morgan')
 
-
+var auth = require('../api/repositories/auth.js')()
 
 /* iniciar o objeto do express */
 var app = express()
 
 
-/* configurar o middleware express.static */
-app.use(express.static('./api/public'))
-
 /* configurar o middleware body-parser */
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
+// Logs das requisicoes
+app.use(morgan('dev'))
 
-app.use(multiparty())
-
+app.use(auth.initialize())
 app.use( (req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', "*")
     res.setHeader('Access-Control-Allow-Methods', "GET,POST,PUT,DELETE")
