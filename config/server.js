@@ -1,29 +1,16 @@
-/* importar o módulo do framework express */
-var express = require('express')
-
-/* importar o módulo do consign */
-var consign = require('consign')
-
-/* importar o módulo do body-parser */
-var bodyParser = require('body-parser')
-
-var morgan = require('morgan')
-
-var auth = require('../api/repositories/auth.js')()
-
-/* iniciar o objeto do express */
-var app = express()
+const express = require('express'),
+    consign = require('consign'),
+    bodyParser = require('body-parser'),
+    morgan = require('morgan'),
+    auth = require('../api/repositories/auth.js')(),
+    app = express()
 
 
-/* configurar o middleware body-parser */
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-
-// Logs das requisicoes
 app.use(morgan('dev'))
-
 app.use(auth.initialize())
-app.use( (req, res, next) => {
+app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', "*")
     res.setHeader('Access-Control-Allow-Methods', "GET,POST,PUT,DELETE")
     res.setHeader('Access-Control-Allow-Headers', "content-type")
@@ -31,14 +18,13 @@ app.use( (req, res, next) => {
     next()
 })
 
-/* efetua o autoload das rotas, dos models e dos controllers para o objeto app */
+/* efetua o autoload das rotas, dos models, dbConn, routes, repositories e controllers para o objeto app */
 consign()
-	.include('api/routes')
-	.then("/config/dbConnection.js")
-	.then('api/models')
+    .include('api/routes')
+    .then("/config/dbConnection.js")
+    .then('api/models')
     .then('api/controllers')
     .then('api/repositories')
-	.into(app)
+    .into(app)
 
-/* exportar o objeto app */
 module.exports = app

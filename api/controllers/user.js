@@ -6,43 +6,28 @@
  */
 module.exports.getUsers = (application, req, res) => {
     let user = new application.api.repositories.user(application)
-    user.getAll((err, results) => {
-        if (err) return res.json(err)
-        res.json(results)
-    })
+    user.getAll()
+        .then(resolve => res.json(resolve))
+        .catch(rejected => res.json(rejected))
 }
+
 module.exports.saveUser = (application, req, res) => {
     let user = new application.api.repositories.user(application)
-    user.save(req.body, (err, result) => {
-        if (err) return res.json(err)
-        res.json(result)
-    })
+    user.save(req.body)
+        .then(resolve => res.json(resolve))
+        .catch(rejected => res.json(rejected))
 }
 
 module.exports.getUserById = (application, req, res) => {
     let user = new application.api.repositories.user(application)
-    user.get(req.params.userid, (err, result) => {
-        if (err) return res.json(err)
-        res.json(result)
-    })
+    user.get(req.params.userid)
+        .then(resolve => res.json(resolve))
+        .catch(rejected => res.status(204).json(rejected))
 }
 
 module.exports.authUser = (application, req, res) => {
-    let jwt = require('jwt-simple')
-    let moment = require('moment')
     let user = new application.api.repositories.user(application)
-    let cfg = application.api.models.authconfig
-    user.getAuth(req.body, (err, user) => {
-        if (err) return res.json(err)
-        if (user.length != 0 && user.length == 1) {
-            let payload = {
-                iat: moment().unix(),
-                exp: moment().add(24, 'hours').unix()
-            }
-            let token = jwt.encode(payload, cfg.jwtSecret)
-            return res.json({ messages: 'Your token has duration 24 hours', token: token })
-        } else {
-            res.json({ message: 'O email ou a senha incorreto' })
-        }
-    })
+    user.getAuth(req.body)
+        .then(resolve => res.json(resolve))
+        .catch(rejected => res.json(rejected))
 }

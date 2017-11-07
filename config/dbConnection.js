@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/easyshare',{useMongoClient: true})
+const url = 'mongodb://localhost/easyshare'
+mongoose.connect(url, { useMongoClient: true }, (err) => {
+  if (err) {
+    console.log("Cannot connecting to: " + url)
+  } else {
+    console.log("Connected to: " + url)
+  }
+})
 mongoose.Promise = global.Promise;
-const db = mongoose.connection
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log("we are connected to Mongoose")
-});
