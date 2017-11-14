@@ -1,14 +1,14 @@
-var passport = require('passport')
-var passportJWT = require('passport-jwt')
-var ExtractJwt = passportJWT.ExtractJwt
-var Strategy = passportJWT.Strategy
-var moment = require('moment')
-var cfg = require('../models/authconfig')
+const passport = require('passport'),
+    passportJWT = require('passport-jwt'),
+    ExtractJwt = passportJWT.ExtractJwt,
+    Strategy = passportJWT.Strategy,
+    moment = require('moment'),
+    cfg = require('../models/authconfig'),
 
-var params = {
-    secretOrKey: cfg.jwtSecret,
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-}
+    params = {
+        secretOrKey: cfg.jwtSecret,
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+    }
 
 module.exports = () => {
     let strategy = new Strategy(params, (payload, done) => {
