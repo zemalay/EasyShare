@@ -1,16 +1,15 @@
 const mongoose = require('mongoose')
 
-var userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     first_name: { type: String, required: true },
     last_name: String,
-    username: { type: String, required: true, index: { unique: true } },
+    username: { type: String, index: { unique: true } },
     gender: { type: String, enum: ['male', 'female'] },
     birth_date: Date,
     date_created: { type: Date, default: Date.now },
     email: { type: String, required: true, index: { unique: true } },
     password: { type: String, minlength: 6, required: true },
-    token: { type: String , default:''}
-
+    token: { type: String, default: '' }
 })
 
 module.exports = {
