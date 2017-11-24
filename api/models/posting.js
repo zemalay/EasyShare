@@ -1,12 +1,13 @@
 const mongoose = require('mongoose')
 
-var postingSchema = new mongoose.Schema({
+const postingSchema = new mongoose.Schema({
     title: String,
+    type: { type: String, required: true, enum: ['tcc', 'artigo', 'postila'] },
     file_path: String,
-    date_created: { type: Date, default: Date.now }
-
+    date_created: { type: Date, default: Date.now },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
 })
 
 module.exports = {
-    Schema : mongoose.model('posting', postingSchema)
+    Schema: mongoose.model('posting', postingSchema)
 }

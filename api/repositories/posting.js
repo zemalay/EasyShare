@@ -1,21 +1,11 @@
-function Posting() { }
+class Posting {
+    constructor(application) {
+        this.postingSchema = application.api.models.posting.Schema
 
-Posting.prototype.getAll = () => {
-
-}
-
-Posting.prototype.savePosting = () => {
+    }
 
 }
 
-Posting.prototype.getPosting = (id) => {
-
-}
-
-Posting.prototype.updatePosting = (id) => {
-
-}
-
-Posting.prototype.removePosting = (id) => {
-
+module.exports = function () {
+    return Posting;
 }
