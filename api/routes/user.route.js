@@ -8,11 +8,11 @@ module.exports = (application) => {
         application.api.controllers.user.saveUser(application, req, res)
     })
 
-    application.put('/api/user/:id', (req, res) => {
+    application.put('/api/user/:id', auth.authenticate(), (req, res) => {
         application.api.controllers.user.updateUser(application, req, res)
     })
 
-    application.put('/api/userkeyupdt', (req, res) => {
+    application.put('/api/userkeyupdt', auth.authenticate(), (req, res) => {
         application.api.controllers.user.updateUserPassword(application, req, res)
     })
 
