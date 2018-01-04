@@ -1,5 +1,5 @@
-module.exports.getUsers = (application, req, res) => {
-    let user = new application.api.repositories.user(application)
+module.exports.getUsers = (app, req, res) => {
+    let user = new app.api.repositories.user(app)
     user.getAll()
         .then(result => res.json(result))
         .catch(rejected => res.status(412).json({
@@ -7,17 +7,17 @@ module.exports.getUsers = (application, req, res) => {
         }))
 }
 
-module.exports.saveUser = (application, req, res) => {
-    let user = new application.api.repositories.user(application)
+module.exports.saveUser = (app, req, res) => {
+    let user = new app.api.repositories.user(app)
     user.save(req.body)
-        .then(result => res.json(result))
+        .then(result => res.status(201).json(result))
         .catch(rejected => res.status(412).json({
             error: rejected.message
         }))
 }
 
-module.exports.getUserById = (application, req, res) => {
-    let user = new application.api.repositories.user(application)
+module.exports.getUserById = (app, req, res) => {
+    let user = new app.api.repositories.user(app)
     user.get(req.params.userid)
         .then(result => res.json(result))
         .catch(rejected => res.status(412).json({
@@ -25,30 +25,30 @@ module.exports.getUserById = (application, req, res) => {
         }))
 }
 
-module.exports.updateUser = (application, req, res) => {
-    let user = new application.api.repositories.user(application)
+module.exports.updateUser = (app, req, res) => {
+    let user = new app.api.repositories.user(app)
     let account = req.body
     account.id = req.params.id
     user.update(account)
-        .then(result => res.json(result))
+        .then(result => res.status(201).json(result))
         .catch(rejected => res.status(412).json({
             error: rejected.message
         }))
 }
 
-module.exports.updateUserPassword = (application, req, res) => {
-    let user = new application.api.repositories.user(application)
+module.exports.updateUserPassword = (app, req, res) => {
+    let user = new app.api.repositories.user(app)
     user.updatePassword(req.body)
-        .then(result => res.json(result))
+        .then(result => res.status(201).json(result))
         .catch(rejected => res.status(412).json({
             error: rejected.message
         }))
 }
-module.exports.authUser = (application, req, res) => {
-    let user = new application.api.repositories.user(application)
+module.exports.authUser = (app, req, res) => {
+    let user = new app.api.repositories.user(app)
     user.getAuth(req.body)
         .then(result => res.json(result))
-        .catch(rejected => res.status(412).json({
+        .catch(rejected => res.status(401).json({
             error: rejected.message
         }))
 }

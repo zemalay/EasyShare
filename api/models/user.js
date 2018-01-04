@@ -8,8 +8,11 @@ const userSchema = new mongoose.Schema({
     birth_date: Date,
     date_created: { type: Date, default: Date.now },
     email: { type: String, required: true, index: { unique: true } },
-    password: { type: String, minlength: 6, required: true },
-    token: { type: String, default: '' }
+    password: { type: String, required: true },
+    hasPosting: { type: Number, default: 0 },
+    token: { type: String, default: '' },
+    course: { type: mongoose.Schema.Types.ObjectId, ref: 'course' },
+    address: { type: mongoose.Schema.Types.ObjectId, ref: 'address' }
 })
 
 module.exports = {

@@ -1,22 +1,22 @@
-module.exports = (application) => {
+module.exports = (app) => {
     var auth = require('../repositories/auth.js')()
 
-    application.get('/api/getusers', auth.authenticate(), (req, res) => {
-        application.api.controllers.user.getUsers(application, req, res)
+    app.get('/api/users', auth.authenticate(), (req, res) => {
+        app.api.controllers.user.getUsers(app, req, res)
     })
-    application.post('/api/saveuser', (req, res) => {
-        application.api.controllers.user.saveUser(application, req, res)
-    })
-
-    application.put('/api/user/:id', auth.authenticate(), (req, res) => {
-        application.api.controllers.user.updateUser(application, req, res)
+    app.post('/api/user', (req, res) => {
+        app.api.controllers.user.saveUser(app, req, res)
     })
 
-    application.put('/api/userkeyupdt', auth.authenticate(), (req, res) => {
-        application.api.controllers.user.updateUserPassword(application, req, res)
+    app.put('/api/user/:id', auth.authenticate(), (req, res) => {
+        app.api.controllers.user.updateUser(app, req, res)
     })
 
-    application.get('/api/getuser/:userid', auth.authenticate(), (req, res) => {
-        application.api.controllers.user.getUserById(application, req, res)
+    app.put('/api/user', auth.authenticate(), (req, res) => {
+        app.api.controllers.user.updateUserPassword(app, req, res)
+    })
+
+    app.get('/api/user/:userid', auth.authenticate(), (req, res) => {
+        app.api.controllers.user.getUserById(app, req, res)
     })
 }

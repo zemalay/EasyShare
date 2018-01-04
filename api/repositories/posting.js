@@ -1,6 +1,6 @@
 class Posting {
-    constructor(application) {
-        this.postingSchema = application.api.models.posting.Schema
+    constructor(app) {
+        this.postingSchema = app.api.models.posting.Schema
 
     }
 
@@ -16,6 +16,22 @@ class Posting {
     async getAll() {
         try {
             return await this.postingSchema.find()
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getByCourse(course) {
+        try {
+            return await this.postingSchema.find({ course: course })
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getBySubjects(subjects) {
+        try {
+            return await this.postingSchema.find({ subjects: subjects })
         } catch (error) {
             throw error
         }

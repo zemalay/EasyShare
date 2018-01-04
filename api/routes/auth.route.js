@@ -1,5 +1,5 @@
-module.exports = (application) => {
-    application.post('/api/authenticate', (req, res) => {
-        application.api.controllers.user.authUser(application, req, res)
+module.exports = (app) => {
+    app.post('/api/authenticate', (req, res) => {
+        app.api.controllers.user.authUser(app, req, res)
     })
 }

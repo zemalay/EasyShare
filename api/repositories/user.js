@@ -1,9 +1,9 @@
 class User {
-    constructor(application) {
-        this.userSchema = application.api.models.user.Schema
+    constructor(app) {
+        this.userSchema = app.api.models.user.Schema
         this.jwt = require('jwt-simple')
         this.moment = require('moment')
-        this.cfg = application.api.models.authconfig
+        this.cfg = app.api.models.authconfig
         this.crypto = require('crypto')
     }
 
