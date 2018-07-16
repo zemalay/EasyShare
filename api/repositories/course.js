@@ -1,26 +1,23 @@
 class Course {
-    constructor(app) {
-        this.courseSchema = app.api.models.course.Schema
-    }
+  constructor(app) {
+    this.courseSchema = app.api.models.course.Schema;
+  }
 
-    async getAll() {
-        try {
-            return await this.courseSchema.find()
-        } catch (error) {
-            throw error
-        }
-    }
+  getAll() {
+    return new Promise((resolve, reject) => {
+      this.courseSchema
+        .find()
+        .then(course => resolve(course))
+        .catch(reject);
+    });
+  }
 
-    async save(newCourse) {
-        try {
-            let objCourse = new this.courseSchema(newCourse)
-            return await objCourse.save(newCourse)
-        } catch (error) {
-            throw error
-        }
-    }
+  save(newCourse) {
+    let objCourse = new this.courseSchema(newCourse);
+    return objCourse.save();
+  }
 }
 
-module.exports = function () {
-    return Course;
-}
+module.exports = function() {
+  return Course;
+};
