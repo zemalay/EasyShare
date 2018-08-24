@@ -1,127 +1,126 @@
 class User {
-    constructor(application) {
-        this.userSchema = application.api.models.user.Schema
-        this.jwt = require('jwt-simple')
-        this.moment = require('moment')
-        this.cfg = application.api.models.authconfig
-        this.crypto = require('crypto')
-    }
+  constructor(app) {
+    this.userSchema = app.api.models.user.Schema;
+    this.jwt = require("jwt-simple");
+    this.moment = require("moment");
+    this.cfg = app.api.models.authconfig;
+    this.crypto = require("crypto");
+  }
 
-    async getAll() {
-        try {
-            return await this.userSchema.find()
-        } catch (error) {
-            throw error
-        }
-    }
+  getAll() {
+    return new Promise((resolve, reject) => {
+      this.userSchema
+        .find()
+        .then(user => resolve(user))
+        .catch(reject);
+    });
+  }
 
-    async save(user) {
-        try {
-            let account = await this.userSchema.findOne({ email: user.email })
+  async save(user) {
+    let account = await this.userSchema.findOne({ email: user.email });
 
-            if (account) throw new Error('Email already exist')
+    if (account) throw new Error("Email already exist");
 
-            let username = await this.userSchema.findOne({
-                username: user.username
-            })
+    let username = await this.userSchema.findOne({
+      username: user.username
+    });
 
-            if (username) throw new Error('Username already exist')
+    if (username) throw new Error("Username already exist");
 
-            const hash = this.crypto.createHmac('sha256', this.cfg.passSecret)
-                .update(user.password)
-                .digest('hex')
+    const hash = this.crypto
+      .createHmac("sha256", this.cfg.passSecret)
+      .update(user.password)
+      .digest("hex");
 
-            user.password = hash
+    user.password = hash;
 
-            let newUser = new this.userSchema(user)
-            return await newUser.save()
-        } catch (error) {
-            throw error
-        }
-    }
+    let newUser = new this.userSchema(user);
 
-    async get(id) {
-        try {
-            let account = await this.userSchema.findById(id)
-            if (!account) throw new Error('User not exist')
-            return account
-        } catch (error) {
-            throw error
-        }
+    return new Promise((resolve, reject) => {
+      newUser
+        .save()
+        .then(user => resolve(user))
+        .catch(reject);
+    });
+  }
 
-    }
+  getById(id) {
+    return new Promise((resolve, reject) => {
+      this.userSchema
+        .findById(id)
+        .then(user => resolve(user))
+        .catch(reject);
+    });
+  }
 
-    async update(account) {
-        try {
-            return await this.userSchema.update({ _id: account.id }, account)
-        } catch (error) {
-            throw error
-        }
+  update(account) {
+    return new Promise((resolve, reject) => {
+      this.userSchema
+        .update({ _id: account.id }, account)
+        .then(user => resolve(user))
+        .catch(reject);
+    });
+  }
 
-    }
+  async updatePassword(user) {
+    let account = await this.userSchema.findOne({ _id: user.id });
 
-    async updatePassword(user) {
-        try {
-            let account = await this.userSchema.findOne({ _id: user.id })
+    if (!account) throw new Error("User not exist");
 
-            if (!account) throw new Error('User not exist')
+    const hash = this.crypto
+      .createHmac("sha256", this.cfg.passSecret)
+      .update(user.password)
+      .digest("hex");
 
-            const hash = this.crypto.createHmac('sha256', this.cfg.passSecret)
-                .update(user.password)
-                .digest('hex')
+    user.password = hash;
 
-            user.password = hash
+    if (user.password !== account.password)
+      throw new Error("Password did not match");
 
-            if (user.password !== account.password) throw new Error('Password did not match')
+    const newHash = this.crypto
+      .createHmac("sha256", this.cfg.passSecret)
+      .update(user.newPassword)
+      .digest("hex");
 
-            const newHash = this.crypto.createHmac('sha256', this.cfg.passSecret)
-                .update(user.newPassword)
-                .digest('hex')
+    user.newPassword = newHash;
+    return await this.userSchema.findOneAndUpdate(
+      { _id: user.id },
+      { $set: { password: user.newPassword } },
+      { new: true }
+    );
+  }
 
-            user.newPassword = newHash
-            return await this.userSchema.findOneAndUpdate(
-                { _id: user.id }, { $set: { password: user.newPassword } }, { new: true }
-            )
-        } catch (error) {
-            throw error
-        }
+  async getAuth(user) {
+    const hash = this.crypto
+      .createHmac("sha256", this.cfg.passSecret)
+      .update(user.password)
+      .digest("hex");
+    user.password = hash;
 
+    let account = await this.userSchema.findOne({
+      email: user.email
+    });
+    if (!account) throw new Error("Account not found");
 
+    if (account.password !== user.password)
+      throw new Error("Password not match");
+    account.token = this.generateToken(account);
 
+    return account;
+  }
 
-    }
+  generateToken(account) {
+    let payload = {
+      init: this.moment().unix(),
+      exp: this.moment()
+        .add(24, "hours")
+        .unix()
+    };
 
-    async getAuth(user) {
-        try {
-            const hash = this.crypto.createHmac('sha256', this.cfg.passSecret)
-                .update(user.password)
-                .digest('hex')
-            user.password = hash
-
-            let account = await this.userSchema.findOne({
-                email: user.email
-            })
-            if (!account) throw new Error('Account not found')
-
-            if (account.password !== user.password) throw new Error('Password not match')
-
-            return this.generateToken(account)
-        } catch (error) {
-            throw error
-        }
-    }
-
-    generateToken(account) {
-        let payload = {
-            init: this.moment().unix(),
-            exp: this.moment().add(24, 'hours').unix()
-        }
-
-        account.token = this.jwt.encode(payload, this.cfg.jwtSecret)
-        return account
-    }
+    return this.jwt.encode(payload, this.cfg.jwtSecret);
+  }
 }
 
-module.exports = function () {
-    return User;
-}
+module.exports = function() {
+  return User;
+};

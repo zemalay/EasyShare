@@ -1,13 +1,11 @@
-module.exports = (application) => {
-    var auth = require('../repositories/auth.js')()
+module.exports = app => {
+  var auth = require("../repositories/auth.js")();
 
-    application.get('/api/getpostings', auth.authenticate(), (req, res) => {
-        application.api.controllers.posting.getAllPostings(application, req, res)
-    })
+  app.get("/api/postings", auth.authenticate(), (req, res) => {
+    app.api.controllers.posting.getAllPostings(app, req, res);
+  });
 
-    application.post('/api/saveposting', auth.authenticate(), (req, res) => {
-        application.api.controllers.posting.savePosting(application, req, res)
-    })
-
-}
-
+  app.post("/api/posting", auth.authenticate(), (req, res) => {
+    app.api.controllers.posting.savePosting(app, req, res);
+  });
+};
