@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   hasPosting: { type: Number, default: 0 },
   token: { type: String, default: "" },
   course: { type: mongoose.Schema.Types.ObjectId, ref: "course" },
-  address: { type: mongoose.Schema.Types.ObjectId, ref: "address" }
+  address: { type: String }
 });
 
 module.exports = {

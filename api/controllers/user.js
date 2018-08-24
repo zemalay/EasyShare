@@ -16,7 +16,7 @@ module.exports.saveUser = (app, req, res) => {
     .save(req.body)
     .then(result => res.status(201).json(result))
     .catch(rejected =>
-      res.status(412).json({
+      res.status(409).json({
         error: rejected.message
       })
     );
@@ -25,11 +25,11 @@ module.exports.saveUser = (app, req, res) => {
 module.exports.getUserById = (app, req, res) => {
   let user = new app.api.repositories.user(app);
   user
-    .get(req.params.userid)
+    .getById(req.params.userid)
     .then(result => res.json(result))
     .catch(rejected =>
       res.status(412).json({
-        error: rejected.message
+        error: rejected
       })
     );
 };
@@ -40,7 +40,7 @@ module.exports.updateUser = (app, req, res) => {
   account.id = req.params.id;
   user
     .update(account)
-    .then(result => res.status(201).json(result))
+    .then(result => res.status(200).json(result))
     .catch(rejected =>
       res.status(412).json({
         error: rejected.message
