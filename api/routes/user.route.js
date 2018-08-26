@@ -4,7 +4,7 @@ module.exports = app => {
   app.get("/api/users", auth.authenticate(), (req, res) => {
     app.api.controllers.user.getUsers(app, req, res);
   });
-  app.post("/api/user", (req, res) => {
+  app.post("/api/user", auth.authenticate(), (req, res) => {
     app.api.controllers.user.saveUser(app, req, res);
   });
 
